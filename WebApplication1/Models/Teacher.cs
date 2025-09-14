@@ -1,11 +1,14 @@
 ﻿namespace WebApplication1.Models
+
 {
     public class Teacher
     {
         public int Id { get; set; }
-        public String FirstName { get; set; } = String.Empty;
-        public String LastName { get; set; } = String.Empty;
-        public String Email { get; set; } = String.Empty;
+        public required string FirstName { get; set; } = string.Empty;
+        public required string LastName { get; set; } = string.Empty;
+        public required string Qualifications { get; set; }
+        public required string Email { get; set; }
+        public string? ClassesTaught { get; set; }
     }
 }
 
