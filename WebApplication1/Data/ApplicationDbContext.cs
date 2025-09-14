@@ -10,6 +10,8 @@ namespace WebApplication1.Data
             : base(options)
         {
         }
-        public DbSet<WebApplication1.Models.Student> Student { get; set; } = default!;
+
+        public DbSet<Teacher> Teacher { get; set; }
+        public DbSet<Student> Student { get; set; }
     }
 }
