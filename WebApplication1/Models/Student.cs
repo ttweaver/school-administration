@@ -7,5 +7,7 @@ namespace WebApplication1.Models
         public string LastName { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; } = string.Empty;
+        public int? ClassroomId { get; set; }
+        public Classroom? Classroom { get; set; }
     }
 }
