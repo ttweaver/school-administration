@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Classrooms
+namespace WebApplication1.Pages.Courses
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace WebApplication1.Pages.Classrooms
             _context = context;
         }
 
-        public Classroom Classroom { get; set; } = default!;
+        public Course Course { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,14 +28,14 @@ namespace WebApplication1.Pages.Classrooms
                 return NotFound();
             }
 
-            var classroom = await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
-            if (classroom == null)
+            var course = await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
+            if (course == null)
             {
                 return NotFound();
             }
             else
             {
-                Classroom = classroom;
+                Course = course;
             }
             return Page();
         }

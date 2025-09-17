@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Teacher
+namespace WebApplication1.Pages.Teachers
 {
     public class CreateModel : PageModel
     {
@@ -25,7 +25,7 @@ namespace WebApplication1.Pages.Teacher
         }
 
         [BindProperty]
-        public WebApplication1.Models.Teacher Teacher { get; set; } = default!;
+        public Teacher Teacher { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()

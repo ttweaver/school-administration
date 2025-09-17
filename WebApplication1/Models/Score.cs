@@ -52,6 +52,6 @@ namespace WebApplication1.Models
 
         // Navigation properties
         public required Student Student { get; set; }
-        public required Classroom Course { get; set; }
+        public required Course Course { get; set; }
     }
 }

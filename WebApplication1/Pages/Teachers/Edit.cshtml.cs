@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Classrooms
+namespace WebApplication1.Pages.Teachers
 {
     public class EditModel : PageModel
     {
@@ -21,7 +21,7 @@ namespace WebApplication1.Pages.Classrooms
         }
 
         [BindProperty]
-        public Classroom Classroom { get; set; } = default!;
+        public Teacher Teacher { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,13 +30,12 @@ namespace WebApplication1.Pages.Classrooms
                 return NotFound();
             }
 
-            var classroom =  await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
-            if (classroom == null)
+            var teacher =  await _context.Teacher.FirstOrDefaultAsync(m => m.Id == id);
+            if (teacher == null)
             {
                 return NotFound();
             }
-            Classroom = classroom;
-           ViewData["TeacherId"] = new SelectList(_context.Teacher, "Id", "Id");
+            Teacher = teacher;
             return Page();
         }
 
@@ -49,7 +48,7 @@ namespace WebApplication1.Pages.Classrooms
                 return Page();
             }
 
-            _context.Attach(Classroom).State = EntityState.Modified;
+            _context.Attach(Teacher).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +56,7 @@ namespace WebApplication1.Pages.Classrooms
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClassroomExists(Classroom.Id))
+                if (!TeacherExists(Teacher.Id))
                 {
                     return NotFound();
                 }
@@ -70,9 +69,9 @@ namespace WebApplication1.Pages.Classrooms
             return RedirectToPage("./Index");
         }
 
-        private bool ClassroomExists(int id)
+        private bool TeacherExists(int id)
         {
-            return _context.Classroom.Any(e => e.Id == id);
+            return _context.Teacher.Any(e => e.Id == id);
         }
     }
 }

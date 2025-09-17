@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Teacher
+namespace WebApplication1.Pages.Courses
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace WebApplication1.Pages.Teacher
         }
 
         [BindProperty]
-        public WebApplication1.Models.Teacher Teacher { get; set; } = default!;
+        public Course Course { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,15 +29,15 @@ namespace WebApplication1.Pages.Teacher
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher.FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (teacher == null)
+            if (course == null)
             {
                 return NotFound();
             }
             else
             {
-                Teacher = teacher;
+                Course = course;
             }
             return Page();
         }
@@ -49,11 +49,11 @@ namespace WebApplication1.Pages.Teacher
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher.FindAsync(id);
-            if (teacher != null)
+            var course = await _context.Classroom.FindAsync(id);
+            if (course != null)
             {
-                Teacher = teacher;
-                _context.Teacher.Remove(Teacher);
+                Course = course;
+                _context.Classroom.Remove(Course);
                 await _context.SaveChangesAsync();
             }
 

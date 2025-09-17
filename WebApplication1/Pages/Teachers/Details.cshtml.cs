@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Teacher
+namespace WebApplication1.Pages.Teachers
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace WebApplication1.Pages.Teacher
             _context = context;
         }
 
-        public WebApplication1.Models.Teacher Teacher { get; set; } = default!;
+        public Teacher Teacher { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

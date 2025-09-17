@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Classrooms
+namespace WebApplication1.Pages.Courses
 {
     public class CreateModel : PageModel
     {
@@ -26,7 +26,7 @@ namespace WebApplication1.Pages.Classrooms
         }
 
         [BindProperty]
-        public Classroom Classroom { get; set; } = default!;
+        public Course Course { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -36,7 +36,7 @@ namespace WebApplication1.Pages.Classrooms
                 return Page();
             }
 
-            _context.Classroom.Add(Classroom);
+            _context.Classroom.Add(Course);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
