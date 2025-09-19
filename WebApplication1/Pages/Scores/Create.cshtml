@@ -27,13 +27,13 @@
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Score.Type" class="control-label"></label>
-                <select asp-for="Score.Type" class="form-control"></select>
+                <select asp-for="Score.Type" class="form-control" asp-items="@(new SelectList(Model.TypeOptions))"></select>
                 <span asp-validation-for="Score.Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Score.Title" class="control-label"></label>
-                <input asp-for="Score.Title" class="form-control" />
+                <select asp-for="Score.Title" class="form-control" asp-items="@(new SelectList(Model.TitleOptions))"></select>
                 <span asp-validation-for="Score.Title" class="text-danger"></span>
             </div>
             <div class="form-group">

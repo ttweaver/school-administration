@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,32 +13,42 @@ namespace WebApplication1.Pages.Scores
         public EditModel(WebApplication1.Data.ApplicationDbContext context)
         {
             _context = context;
+            TitleOptions = new List<string>(); // Initialize to avoid CS8618
         }
 
         [BindProperty]
         public Score Score { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        // Add this property for your dropdown options
+        public SelectList TypeOptions { get; set; }
+        public List<string> TitleOptions { get; set; }
+        public async Task<IActionResult> OnGet(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var score =  await _context.Score.FirstOrDefaultAsync(m => m.Id == id);
+            var score = await _context.Score.FirstOrDefaultAsync(m => m.Id == id);
             if (score == null)
             {
                 return NotFound();
             }
             Score = score;
-           ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
-           ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
+            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
+
+            TitleOptions = new List<string> { "Quiz", "Exam", "Assignment", "Project" };
+
+            // Use enum values for TypeOptions
+            TypeOptions = new SelectList(Enum.GetValues(typeof(ScoreType)));
+
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {

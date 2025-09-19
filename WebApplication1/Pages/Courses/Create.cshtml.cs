@@ -28,6 +28,8 @@ namespace WebApplication1.Pages.Courses
         [BindProperty]
         public Course Course { get; set; } = default!;
 
+        public List<string> TypeOptions { get; set; }
+
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
@@ -40,6 +42,10 @@ namespace WebApplication1.Pages.Courses
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+        public CreateModel()
+        {
+            TypeOptions = new List<string> { "Exam", "Quiz", "Assignment", "Project" };
         }
     }
 }

@@ -19,10 +19,13 @@ namespace WebApplication1.Pages.Scores
             _context = context;
         }
 
+        public List<string> TitleOptions { get; set; } = new() { "Quiz", "Homework", "Exam", "Project" };
+        public List<string> TypeOptions { get; set; } = new List<string> { "Exam", "Quiz", "Assignment", "Project" };
+
         public IActionResult OnGet()
         {
-        ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
-        ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
+            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
             return Page();
         }
 

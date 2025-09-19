@@ -30,15 +30,15 @@
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Score.Type" class="control-label"></label>
-                <select asp-for="Score.Type" class="form-control"></select>
+                <select asp-for="Score.Type" class="form-control" asp-items="@(new SelectList(Model.TypeOptions))"></select>
                 <span asp-validation-for="Score.Type" class="text-danger"></span>
-            </div>
+			</div>
             <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="Score.Title" class="control-label"></label>
-                <input asp-for="Score.Title" class="form-control" />
-                <span asp-validation-for="Score.Title" class="text-danger"></span>
-            </div>
+                    <span class="text-danger">*</span>
+                    <label asp-for="Score.Title" class="control-label"></label>
+                    <select asp-for="Score.Title" class="form-control" asp-items="@(new SelectList(Model.TitleOptions))"></select>
+                    <span asp-validation-for="Score.Title" class="text-danger"></span>
+                </div>
             <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Score.DateAssigned" class="control-label"></label>
@@ -61,7 +61,7 @@
                 <label asp-for="Score.Comments" class="control-label"></label>
                 <input asp-for="Score.Comments" class="form-control" />
                 <span asp-validation-for="Score.Comments" class="text-danger"></span>
-            </div>
+            </div>           
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
