@@ -1,0 +1,78 @@
+﻿@page
+@model WebApplication1.Pages.Scores.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Score</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Score.Id" />
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.StudentId" class="control-label"></label>
+                <select asp-for="Score.StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
+                <span asp-validation-for="Score.StudentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.CourseId" class="control-label"></label>
+                <select asp-for="Score.CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
+                <span asp-validation-for="Score.CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.Type" class="control-label"></label>
+                <select asp-for="Score.Type" class="form-control"></select>
+                <span asp-validation-for="Score.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.Title" class="control-label"></label>
+                <input asp-for="Score.Title" class="form-control" />
+                <span asp-validation-for="Score.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.DateAssigned" class="control-label"></label>
+                <input asp-for="Score.DateAssigned" class="form-control" />
+                <span asp-validation-for="Score.DateAssigned" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.PointsPossible" class="control-label"></label>
+                <input asp-for="Score.PointsPossible" class="form-control" />
+                <span asp-validation-for="Score.PointsPossible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Score.PointsEarned" class="control-label"></label>
+                <input asp-for="Score.PointsEarned" class="form-control" />
+                <span asp-validation-for="Score.PointsEarned" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Score.Comments" class="control-label"></label>
+                <input asp-for="Score.Comments" class="form-control" />
+                <span asp-validation-for="Score.Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -25,7 +25,7 @@ namespace WebApplication1.Models
         [Display(Name = "Teacher")]
         public int TeacherId { get; set; }
         // Navigation property for Teacher
-        public required Teacher Teacher { get; set; }
+        public Teacher? Teacher { get; set; }
         
         
     }
