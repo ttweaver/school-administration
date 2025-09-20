@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
@@ -7,9 +8,13 @@ namespace WebApplication1.Models
         public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public DateTime DateOfBirth { get; set; }
+
+        [DataType(DataType.Date)]
+		public DateTime DateOfBirth { get; set; }
+
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         public string Email { get; set; } = string.Empty;
-        public int? ClassroomId { get; set; }
+		public int? ClassroomId { get; set; }
         public Course? Course { get; set; }
 
         // Common address attributes
@@ -20,7 +25,12 @@ namespace WebApplication1.Models
         public string Country { get; set; } = string.Empty;
 
         // Common contact information
+        [Phone(ErrorMessage = "Please enter a valid mobile phone number.")]
+        [StringLength(20, ErrorMessage = "Mobile phone number cannot be longer than 20 characters.")]
         public string MobilePhone { get; set; } = string.Empty;
+
+        [Phone(ErrorMessage = "Please enter a valid home phone number.")]
+        [StringLength(20, ErrorMessage = "Home phone number cannot be longer than 20 characters.")]
         public string HomePhone { get; set; } = string.Empty;
         public string EmergencyContactName { get; set; } = string.Empty;
         public string EmergencyContactPhone { get; set; } = string.Empty;
