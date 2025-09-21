@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,14 +12,14 @@ namespace WebApplication1.Pages.Classrooms
 {
     public class DetailsModel : PageModel
     {
-        private readonly WebApplication1.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DetailsModel(WebApplication1.Data.ApplicationDbContext context)
+        public DetailsModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public Classroom Classroom { get; set; } = default!;
+        public Classroom? Classroom { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,14 +28,13 @@ namespace WebApplication1.Pages.Classrooms
                 return NotFound();
             }
 
-            var classroom = await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
-            if (classroom == null)
+            Classroom = await _context.Classroom
+                .Include(c => c.Teacher)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Classroom == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                Classroom = classroom;
             }
             return Page();
         }

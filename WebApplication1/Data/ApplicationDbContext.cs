@@ -15,5 +15,6 @@ namespace WebApplication1.Data
         public DbSet<Student> Student { get; set; } = default!;
         public DbSet<Teacher> Teacher { get; set; } = default!;
         public DbSet<Classroom> Classroom { get; set; } = default!;
+         
     }
 }

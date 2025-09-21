@@ -41,7 +41,14 @@
             @Html.DisplayNameFor(model => model.Classroom.Teacher)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Classroom.Teacher.Id)
+            @if (Model.Classroom.Teacher != null)
+            {
+                @Html.DisplayFor(model => model.Classroom.Teacher!.Id)
+            }
+            else
+            {
+                <span class="text-muted">No Teacher Assigned</span>
+            }
         </dd>
     </dl>
     

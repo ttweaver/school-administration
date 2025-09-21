@@ -19,12 +19,14 @@ namespace WebApplication1.Pages.Classrooms
             _context = context;
         }
 
+        
         public IList<Classroom> Classroom { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             Classroom = await _context.Classroom
-                .Include(c => c.Teacher).ToListAsync();
+                .Include(c => c.Teacher)
+                .ToListAsync();
         }
     }
 }
