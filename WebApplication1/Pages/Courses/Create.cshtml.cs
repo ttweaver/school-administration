@@ -21,7 +21,7 @@ namespace WebApplication1.Pages.Courses
 
         public IActionResult OnGet()
         {
-        ViewData["TeacherId"] = new SelectList(_context.Teacher, "Id", "Id");
+            ViewData["TeacherId"] = new SelectList(_context.Teacher, "Id", "LastName", null);
             return Page();
         }
 
