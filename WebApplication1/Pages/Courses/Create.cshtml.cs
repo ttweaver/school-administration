@@ -43,9 +43,5 @@ namespace WebApplication1.Pages.Courses
 
             return RedirectToPage("./Index");
         }
-        public CreateModel()
-        {
-            TypeOptions = new List<string> { "Exam", "Quiz", "Assignment", "Project" };
-        }
     }
 }
