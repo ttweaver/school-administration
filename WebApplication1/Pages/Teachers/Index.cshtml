@@ -1,12 +1,12 @@
 ﻿@page
-@model WebApplication1.Pages.Students.IndexModel
+@model WebApplication1.Pages.Teachers.IndexModel
 
 @{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Teachers";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Students</h1>
+<h1>Teachers</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -15,22 +15,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Student[0].FirstName)
+                @Html.DisplayNameFor(model => model.Teacher[0].FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student[0].LastName)
+                @Html.DisplayNameFor(model => model.Teacher[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student[0].DateOfBirth)
+                @Html.DisplayNameFor(model => model.Teacher[0].Qualifications)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student[0].Email)
+                @Html.DisplayNameFor(model => model.Teacher[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teacher[0].ClassesTaught)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Student) {
+@foreach (var item in Model.Teacher) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -39,10 +42,13 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
+                @Html.DisplayFor(modelItem => item.Qualifications)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassesTaught)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
