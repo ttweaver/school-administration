@@ -21,10 +21,16 @@
                 @Html.DisplayNameFor(model => model.Teacher[0].LastName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Teacher[0].Contact)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Teacher[0].Qualifications)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Teacher[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Teacher[0].Address)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Teacher[0].ClassesTaught)
@@ -42,11 +48,17 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Contact)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Qualifications)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClassesTaught)
             </td>

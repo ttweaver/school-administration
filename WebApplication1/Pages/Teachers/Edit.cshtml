@@ -26,9 +26,19 @@
                 <span asp-validation-for="Teacher.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Teacher.Contact" class="control-label"></label>
+                <input asp-for="Teacher.Contact" class="form-control" />
+                <span asp-validation-for="Teacher.Contact" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Teacher.Qualifications" class="control-label"></label>
                 <input asp-for="Teacher.Qualifications" class="form-control" />
                 <span asp-validation-for="Teacher.Qualifications" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teacher.Address" class="control-label"></label>
+                <input asp-for="Teacher.Address" class="form-control" />
+                <span asp-validation-for="Teacher.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Teacher.Email" class="control-label"></label>
