@@ -21,14 +21,12 @@ namespace WebApplication1.Pages.Courses
 
         public IActionResult OnGet()
         {
-            ViewData["TeacherId"] = new SelectList(_context.Teacher, "Id", "LastName", null);
+            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "LastName", null);
             return Page();
         }
 
         [BindProperty]
         public Course Course { get; set; } = default!;
-
-        public List<string> TypeOptions { get; set; }
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -38,7 +36,7 @@ namespace WebApplication1.Pages.Courses
                 return Page();
             }
 
-            _context.Classroom.Add(Course);
+            _context.Courses.Add(Course);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

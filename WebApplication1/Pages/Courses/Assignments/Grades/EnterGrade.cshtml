@@ -1,0 +1,33 @@
+@page "/Courses/{courseId:int}/Assignments/{assignmentId:int}/Grades/Enter/{studentId:int}"
+@model WebApplication1.Pages.Courses.Assignments.Grades.EnterGradeModel
+
+@{
+    ViewData["Title"] = "Enter Grade";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Enter Grade for @Model.Student?.FirstName @Model.Student?.LastName</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="AssignmentScore.PointsEarned"></label>
+        <input asp-for="AssignmentScore.PointsEarned" class="form-control" />
+        <span asp-validation-for="AssignmentScore.PointsEarned" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AssignmentScore.Comments"></label>
+        <textarea asp-for="AssignmentScore.Comments" class="form-control"></textarea>
+        <span asp-validation-for="AssignmentScore.Comments" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="AssignmentScore.AssignmentId" />
+    <input type="hidden" asp-for="AssignmentScore.StudentId" />
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="./Index"
+       asp-route-courseId="@Model.CourseId"
+       asp-route-assignmentId="@Model.AssignmentId"
+       class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

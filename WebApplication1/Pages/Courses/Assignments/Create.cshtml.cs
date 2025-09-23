@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Scores
+namespace WebApplication1.Pages.Courses.Assignments
 {
     public class CreateModel : PageModel
     {
@@ -19,31 +19,32 @@ namespace WebApplication1.Pages.Scores
             _context = context;
         }
 
-        public List<string> TitleOptions { get; set; } = new() { "Quiz", "Homework", "Exam", "Project" };
-        public List<string> TypeOptions { get; set; } = new List<string> { "Exam", "Quiz", "Assignment", "Project" };
+		public List<string> TypeOptions { get; set; } = new List<string> { "Assignment", "Exam", "Project", "Quiz" };
+        public int CourseId { get; set; }
 
-        public IActionResult OnGet()
+		public IActionResult OnGet(int courseId)
         {
-            ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
-            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
+            this.CourseId = courseId;
+			ViewData["StudentId"] = new SelectList(_context.Students, "Id", "LastName");
             return Page();
         }
 
         [BindProperty]
-        public Score Score { get; set; } = default!;
+        public Assignment Assignment { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int courseId)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Score.Add(Score);
+			Assignment.CourseId = courseId;
+			_context.Assignments.Add(Assignment);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage($"/Courses/Assignments/Index", new { courseId });
         }
     }
 }

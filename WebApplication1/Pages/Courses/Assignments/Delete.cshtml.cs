@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Scores
+namespace WebApplication1.Pages.Courses.Assignments
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace WebApplication1.Pages.Scores
         }
 
         [BindProperty]
-        public Score Score { get; set; } = default!;
+        public Assignment Score { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,7 +29,7 @@ namespace WebApplication1.Pages.Scores
                 return NotFound();
             }
 
-            var score = await _context.Score.FirstOrDefaultAsync(m => m.Id == id);
+            var score = await _context.Assignments.FirstOrDefaultAsync(m => m.Id == id);
 
             if (score == null)
             {
@@ -49,11 +49,11 @@ namespace WebApplication1.Pages.Scores
                 return NotFound();
             }
 
-            var score = await _context.Score.FindAsync(id);
+            var score = await _context.Assignments.FindAsync(id);
             if (score != null)
             {
                 Score = score;
-                _context.Score.Remove(Score);
+                _context.Assignments.Remove(Score);
                 await _context.SaveChangesAsync();
             }
 

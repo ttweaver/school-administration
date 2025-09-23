@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250921142713_RenameScoreAddGrade")]
+    partial class RenameScoreAddGrade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,10 +265,10 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Assignments");
+                    b.ToTable("Assignment");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.AssignmentScore", b =>
+            modelBuilder.Entity("WebApplication1.Models.AssignmentGrade", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -283,17 +286,20 @@ namespace WebApplication1.Data.Migrations
                     b.Property<DateTime>("DateAwarded")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PointsEarned")
+                    b.Property<int>("Letter")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("AssignmentScores");
+                    b.ToTable("AssignmentGrade");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Course", b =>
@@ -319,19 +325,14 @@ namespace WebApplication1.Data.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
-
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Classroom");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.CourseGrade", b =>
@@ -358,37 +359,14 @@ namespace WebApplication1.Data.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("CourseGrades");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Enrollment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollments");
+                    b.ToTable("ClassGrade");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Student", b =>
@@ -403,9 +381,15 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ClassroomId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -454,7 +438,9 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Students");
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Teacher", b =>
@@ -486,7 +472,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Teacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -551,7 +537,7 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.AssignmentScore", b =>
+            modelBuilder.Entity("WebApplication1.Models.AssignmentGrade", b =>
                 {
                     b.HasOne("WebApplication1.Models.Assignment", "Assignment")
                         .WithMany()
@@ -564,10 +550,6 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Course", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Student", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("StudentId");
-
                     b.HasOne("WebApplication1.Models.Teacher", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
@@ -588,33 +570,18 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Enrollment", b =>
+            modelBuilder.Entity("WebApplication1.Models.Student", b =>
                 {
                     b.HasOne("WebApplication1.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Course", b =>
                 {
                     b.Navigation("Assignments");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Student", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

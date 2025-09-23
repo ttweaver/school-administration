@@ -1,48 +1,42 @@
-﻿@page
-@model WebApplication1.Pages.Scores.IndexModel
+﻿@page "/Courses/{courseId}/Assignments"
+@model WebApplication1.Pages.Courses.Assignments.IndexModel
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Assignments</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="/Courses/Assignments/Create" asp-route-courseId="@Model.CourseId">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].Type)
+                @Html.DisplayNameFor(model => model.Assignments[0].Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].Title)
+                @Html.DisplayNameFor(model => model.Assignments[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].DateAssigned)
+                @Html.DisplayNameFor(model => model.Assignments[0].DateAssigned)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].PointsPossible)
+                @Html.DisplayNameFor(model => model.Assignments[0].PointsPossible)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].PointsEarned)
+                @Html.DisplayNameFor(model => model.Assignments[0].Comments)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Score[0].Comments)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Score[0].Student)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Score[0].Course)
+                @Html.DisplayNameFor(model => model.Assignments[0].Course)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Score) {
+@foreach (var item in Model.Assignments) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
@@ -57,13 +51,7 @@
                 @Html.DisplayFor(modelItem => item.PointsPossible)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PointsEarned)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Comments)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Course.Name)
@@ -71,7 +59,8 @@
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="./Grades/Index" asp-route-courseId="@item.CourseId" asp-route-assignmentId="@item.Id">Enter Grade</a>
             </td>
         </tr>
 }

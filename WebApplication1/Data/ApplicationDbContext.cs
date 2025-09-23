@@ -12,9 +12,12 @@ namespace WebApplication1.Data
             : base(options)
         {
         }
-        public DbSet<Student> Student { get; set; } = default!;
-        public DbSet<Teacher> Teacher { get; set; } = default!;
-        public DbSet<Course> Classroom { get; set; } = default!;
-        public DbSet<WebApplication1.Models.Score> Score { get; set; } = default!;
-    }
+        public DbSet<Student> Students { get; set; } = default!;
+        public DbSet<Teacher> Teachers { get; set; } = default!;
+        public DbSet<Course> Courses { get; set; } = default!;
+		public DbSet<Assignment> Assignments { get; set; } = default!;
+		public DbSet<AssignmentScore> AssignmentScores { get; set; } = default!;
+		public DbSet<CourseGrade> CourseGrades { get; set; } = default!;
+        public DbSet<Enrollment> Enrollments { get; set; } = default!;
+	}
 }

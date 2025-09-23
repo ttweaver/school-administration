@@ -1,0 +1,45 @@
+@page "/Courses/{courseId:int}/Assignments/{assignmentId:int}/Grades"
+@model WebApplication1.Pages.Courses.Assignments.Grades.IndexModel
+
+@{
+    ViewData["Title"] = "Enter Grades";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Enter Grades for @Model.Assignment?.Title</h1>
+
+@if (Model.Students.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Points Earned</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var student in Model.Students)
+        {
+            var grade = Model.AssignmentGrades?.FirstOrDefault(g => g.StudentId == student.Id);
+            <tr>
+                <td>@student.FirstName @student.LastName</td>
+                <td>@(grade?.PointsEarned.ToString() ?? "-")</td>
+                <td>
+                    <a asp-page="./EnterGrade"
+                       asp-route-courseId="@Model.CourseId"
+                       asp-route-assignmentId="@Model.AssignmentId"
+                       asp-route-studentId="@student.Id"
+                       class="btn btn-primary btn-sm">
+                        Enter Grade
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>No students enrolled in this course.</div>
+}

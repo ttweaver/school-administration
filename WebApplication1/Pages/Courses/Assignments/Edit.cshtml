@@ -1,0 +1,66 @@
+﻿@page
+@model WebApplication1.Pages.Courses.Assignments.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Score</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Assignment.Id" />
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.CourseId" class="control-label"></label>
+                <select asp-for="Assignment.CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
+                <span asp-validation-for="Assignment.CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.Type" class="control-label"></label>
+                <select asp-for="Assignment.Type" class="form-control"></select>
+                <span asp-validation-for="Assignment.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.Title" class="control-label"></label>
+                <input asp-for="Assignment.Title" class="form-control" />
+                <span asp-validation-for="Assignment.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.DateAssigned" class="control-label"></label>
+                <input asp-for="Assignment.DateAssigned" class="form-control" />
+                <span asp-validation-for="Assignment.DateAssigned" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.PointsPossible" class="control-label"></label>
+                <input asp-for="Assignment.PointsPossible" class="form-control" />
+                <span asp-validation-for="Assignment.PointsPossible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Assignment.Comments" class="control-label"></label>
+                <input asp-for="Assignment.Comments" class="form-control" />
+                <span asp-validation-for="Assignment.Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

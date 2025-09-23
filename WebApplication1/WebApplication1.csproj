@@ -17,4 +17,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Courses\Grades\" />
+    <Folder Include="Pages\Students\Schedule\" />
+  </ItemGroup>
+
 </Project>

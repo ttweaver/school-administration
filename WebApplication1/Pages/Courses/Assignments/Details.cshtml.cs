@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Scores
+namespace WebApplication1.Pages.Courses.Assignments
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace WebApplication1.Pages.Scores
             _context = context;
         }
 
-        public Score Score { get; set; } = default!;
+        public Assignment Assignment { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,14 +28,14 @@ namespace WebApplication1.Pages.Scores
                 return NotFound();
             }
 
-            var score = await _context.Score.FirstOrDefaultAsync(m => m.Id == id);
-            if (score == null)
+            var assignment = await _context.Assignments.FirstOrDefaultAsync(m => m.Id == id);
+            if (assignment == null)
             {
                 return NotFound();
             }
             else
             {
-                Score = score;
+				Assignment = assignment;
             }
             return Page();
         }

@@ -30,13 +30,13 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course =  await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
+            var course =  await _context.Courses.FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
                 return NotFound();
             }
             Course = course;
-           ViewData["TeacherId"] = new SelectList(_context.Teacher, "Id", "Id");
+           ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "Id");
             return Page();
         }
 
@@ -72,7 +72,7 @@ namespace WebApplication1.Pages.Courses
 
         private bool CourseExists(int id)
         {
-            return _context.Classroom.Any(e => e.Id == id);
+            return _context.Courses.Any(e => e.Id == id);
         }
     }
 }

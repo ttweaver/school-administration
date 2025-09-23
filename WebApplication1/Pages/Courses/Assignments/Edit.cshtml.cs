@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Scores
+namespace WebApplication1.Pages.Courses.Assignments
 {
     public class EditModel : PageModel
     {
@@ -13,49 +18,39 @@ namespace WebApplication1.Pages.Scores
         public EditModel(WebApplication1.Data.ApplicationDbContext context)
         {
             _context = context;
-            TitleOptions = new List<string>(); // Initialize to avoid CS8618
         }
 
         [BindProperty]
-        public Score Score { get; set; } = default!;
+        public Assignment Assignment { get; set; } = default!;
 
-        // Add this property for your dropdown options
-        public SelectList TypeOptions { get; set; }
-        public List<string> TitleOptions { get; set; }
-        public async Task<IActionResult> OnGet(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var score = await _context.Score.FirstOrDefaultAsync(m => m.Id == id);
-            if (score == null)
+            var assignment =  await _context.Assignments.FirstOrDefaultAsync(m => m.Id == id);
+            if (assignment == null)
             {
                 return NotFound();
             }
-            Score = score;
-            ViewData["CourseId"] = new SelectList(_context.Classroom, "Id", "Name");
-            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Id");
-
-            TitleOptions = new List<string> { "Quiz", "Exam", "Assignment", "Project" };
-
-            // Use enum values for TypeOptions
-            TypeOptions = new SelectList(Enum.GetValues(typeof(ScoreType)));
-
+			Assignment = assignment;
+           ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name");
+           ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Id");
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Score).State = EntityState.Modified;
+            _context.Attach(Assignment).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +58,7 @@ namespace WebApplication1.Pages.Scores
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ScoreExists(Score.Id))
+                if (!ScoreExists(Assignment.Id))
                 {
                     return NotFound();
                 }
@@ -78,7 +73,7 @@ namespace WebApplication1.Pages.Scores
 
         private bool ScoreExists(int id)
         {
-            return _context.Score.Any(e => e.Id == id);
+            return _context.Assignments.Any(e => e.Id == id);
         }
     }
 }

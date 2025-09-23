@@ -1,0 +1,67 @@
+﻿@page "/Courses/{courseId}/Assignments/Create"
+@model WebApplication1.Pages.Courses.Assignments.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Assignment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.Type" class="control-label"></label>
+                <select asp-for="Assignment.Type" class="form-control" asp-items="Html.GetEnumSelectList<WebApplication1.Models.AssignmentType>().OrderBy(x => x.Text).ToList()">
+                    <option value="">-- Select Assignment Type --</option>
+                </select>
+                <span asp-validation-for="Assignment.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.Title" class="control-label"></label>
+                <input asp-for="Assignment.Title" class="form-control" />
+                <span asp-validation-for="Assignment.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.Description" class="control-label"></label>
+                <input asp-for="Assignment.Description" class="form-control" />
+                <span asp-validation-for="Assignment.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.DateAssigned" class="control-label"></label>
+                <input asp-for="Assignment.DateAssigned" class="form-control" />
+                <span asp-validation-for="Assignment.DateAssigned" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="Assignment.PointsPossible" class="control-label"></label>
+                <input asp-for="Assignment.PointsPossible" class="form-control" />
+                <span asp-validation-for="Assignment.PointsPossible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Assignment.Comments" class="control-label"></label>
+                <input asp-for="Assignment.Comments" class="form-control" />
+                <span asp-validation-for="Assignment.Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

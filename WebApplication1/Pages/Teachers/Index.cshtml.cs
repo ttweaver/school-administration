@@ -23,7 +23,7 @@ namespace WebApplication1.Pages.Teachers
 
         public async Task OnGetAsync()
         {
-            Teacher = await _context.Teacher.ToListAsync();
+            Teacher = await _context.Teachers.ToListAsync();
         }
     }
 }

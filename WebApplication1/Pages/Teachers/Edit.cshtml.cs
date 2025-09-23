@@ -30,7 +30,7 @@ namespace WebApplication1.Pages.Teachers
                 return NotFound();
             }
 
-            var teacher =  await _context.Teacher.FirstOrDefaultAsync(m => m.Id == id);
+            var teacher =  await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
             if (teacher == null)
             {
                 return NotFound();
@@ -71,7 +71,7 @@ namespace WebApplication1.Pages.Teachers
 
         private bool TeacherExists(int id)
         {
-            return _context.Teacher.Any(e => e.Id == id);
+            return _context.Teachers.Any(e => e.Id == id);
         }
     }
 }

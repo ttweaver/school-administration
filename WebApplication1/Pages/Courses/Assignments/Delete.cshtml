@@ -1,5 +1,5 @@
 ﻿@page
-@model WebApplication1.Pages.Scores.DeleteModel
+@model WebApplication1.Pages.Courses.Assignments.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -38,22 +38,10 @@
             @Html.DisplayFor(model => model.Score.PointsPossible)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Score.PointsEarned)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Score.PointsEarned)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Score.Comments)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Score.Comments)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Score.Student)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Score.Student.Id)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Score.Course)

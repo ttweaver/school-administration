@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250922040454_UpdatedDbContext")]
+    partial class UpdatedDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,7 +268,7 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("Assignments");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.AssignmentScore", b =>
+            modelBuilder.Entity("WebApplication1.Models.AssignmentGrade", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -283,17 +286,20 @@ namespace WebApplication1.Data.Migrations
                     b.Property<DateTime>("DateAwarded")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PointsEarned")
+                    b.Property<int>("Letter")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("AssignmentScores");
+                    b.ToTable("AssignmentGrades");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Course", b =>
@@ -357,6 +363,9 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -551,7 +560,7 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.AssignmentScore", b =>
+            modelBuilder.Entity("WebApplication1.Models.AssignmentGrade", b =>
                 {
                     b.HasOne("WebApplication1.Models.Assignment", "Assignment")
                         .WithMany()

@@ -35,7 +35,7 @@ namespace WebApplication1.Pages.Teachers
                 return Page();
             }
 
-            _context.Teacher.Add(Teacher);
+            _context.Teachers.Add(Teacher);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

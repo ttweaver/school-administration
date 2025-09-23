@@ -29,7 +29,7 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course = await _context.Classroom.FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _context.Courses.FirstOrDefaultAsync(m => m.Id == id);
 
             if (course == null)
             {
@@ -49,11 +49,11 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course = await _context.Classroom.FindAsync(id);
+            var course = await _context.Courses.FindAsync(id);
             if (course != null)
             {
                 Course = course;
-                _context.Classroom.Remove(Course);
+                _context.Courses.Remove(Course);
                 await _context.SaveChangesAsync();
             }
 

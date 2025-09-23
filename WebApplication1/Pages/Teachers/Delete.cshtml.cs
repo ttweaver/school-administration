@@ -29,7 +29,7 @@ namespace WebApplication1.Pages.Teachers
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher.FirstOrDefaultAsync(m => m.Id == id);
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
 
             if (teacher == null)
             {
@@ -49,11 +49,11 @@ namespace WebApplication1.Pages.Teachers
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher.FindAsync(id);
+            var teacher = await _context.Teachers.FindAsync(id);
             if (teacher != null)
             {
                 Teacher = teacher;
-                _context.Teacher.Remove(Teacher);
+                _context.Teachers.Remove(Teacher);
                 await _context.SaveChangesAsync();
             }
 
