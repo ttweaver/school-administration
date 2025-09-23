@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250915032423_Add Scores")]
-    partial class AddScores
+    [Migration("20250919033145_AddScore")]
+    partial class AddScore
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,7 +227,7 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Classroom", b =>
+            modelBuilder.Entity("WebApplication1.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,6 +260,50 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("Classroom");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.Score", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAssigned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PointsEarned")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal>("PointsPossible")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Score");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -269,6 +313,9 @@ namespace WebApplication1.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClassroomId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
@@ -288,7 +335,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Student");
                 });
@@ -376,7 +423,7 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Classroom", b =>
+            modelBuilder.Entity("WebApplication1.Models.Course", b =>
                 {
                     b.HasOne("WebApplication1.Models.Teacher", "Teacher")
                         .WithMany()
@@ -387,13 +434,32 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.Score", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Student", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Classroom", "Classroom")
+                    b.HasOne("WebApplication1.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("ClassroomId");
+                        .HasForeignKey("CourseId");
 
-                    b.Navigation("Classroom");
+                    b.Navigation("Course");
                 });
 #pragma warning restore 612, 618
         }

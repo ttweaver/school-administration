@@ -1,4 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +10,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddScores : Migration
+    public partial class AddClassroom : Migration
+
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,3 +83,4 @@ namespace WebApplication1.Data.Migrations
         }
     }
 }
+ 

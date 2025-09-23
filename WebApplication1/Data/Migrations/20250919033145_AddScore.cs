@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class addscore : Migration
+    public partial class AddScore : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -9,3 +9,18 @@
     <p>Please select from the above menu</p>
     @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
 </div>
+
+@* 
+    The error CS1061 indicates that 'Score' does not have a property or field named 'StudentId'.
+    To fix this, you need to use the correct property name that links a Score to a Student.
+    If you are unsure, please provide the definition of the 'Score' class.
+    For example, if the property is 'StudentID', use 'sc.StudentID'.
+    If it is 'Student', use 'sc.Student.Id'.
+    Below is a placeholder fix using 'StudentID'. Please adjust as needed.
+*@
+@foreach (var student in Model.Students.Where(s => Model.Score.Any(sc => sc.StudentId == s.Id)).Distinct())
+{
+    <a asp-page="./ExportReport" asp-route-studentId="@student.Id" class="btn btn-primary">
+        Export Progress Report (PDF) for @student.FirstName @student.LastName
+    </a>
+}
