@@ -1,18 +1,23 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using System.Security.Claims;
 
 namespace WebApplication1.Pages.Students
 {
     public class DashboardModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DashboardModel(ApplicationDbContext context)
+        public DashboardModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public List<Course> EnrolledCourses { get; set; } = new();
@@ -20,8 +25,6 @@ namespace WebApplication1.Pages.Students
         public Dictionary<int, string> CourseGrades { get; set; } = new();
         public Dictionary<int, List<AssignmentInfo>> AssignmentsByCourse { get; set; } = new();
         public Dictionary<int, string> CourseNames { get; set; } = new();
-
-        // Add this property
         public string StudentFirstName { get; set; } = "";
 
         public class AssignmentInfo
@@ -42,6 +45,18 @@ namespace WebApplication1.Pages.Students
             {
                 return NotFound();
             }
+
+            // Get the logged-in user's email
+            var userEmail = User.Identity?.IsAuthenticated == true
+                ? User.FindFirstValue(ClaimTypes.Email)
+                : null;
+
+            // Only allow access if the logged-in user's email matches the student's email
+            if (string.IsNullOrEmpty(userEmail) || !string.Equals(userEmail, student.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                return Forbid();
+            }
+
             StudentFirstName = student.FirstName;
 
             // Get enrolled courses

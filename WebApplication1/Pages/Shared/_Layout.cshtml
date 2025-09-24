@@ -1,6 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using WebApplication1.Data
+@using WebApplication1.Models
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext DbContext
+
+@{
+    string? studentDashboardUrl = null;
+    if (SignInManager.IsSignedIn(User))
+    {
+        var email = UserManager.GetUserName(User);
+        var student = DbContext.Students.FirstOrDefault(s => s.Email == email);
+        if (student != null)
+        {
+            studentDashboardUrl = Url.Page("/Students/Dashboard", new { studentId = student.Id });
+        }
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +51,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Courses/Index">Courses </a>
                         </li>
+                        @if (studentDashboardUrl != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@studentDashboardUrl">Student Dashboard</a>
+                            </li>
+                        }
                         @if (SignInManager.IsSignedIn(User) && (User.IsInRole("UserManager") || User.IsInRole("Admin")))
                         {
                             <li class="nav-item">

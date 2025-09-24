@@ -161,7 +161,7 @@ namespace WebApplication1.Data
                         {
                             FirstName = first,
                             LastName = last,
-                            Email = $"{first}.{last}{num}@example.com".ToLower(),
+                            Email = $"{first}.{last}{num}@gmail.com".ToLower(),
                             Qualifications = qual,
                             Contact = phone,
                             Address = $"{streetNumber} {streetName}, {cityState.City}, {cityState.State}",
