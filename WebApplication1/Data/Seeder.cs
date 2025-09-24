@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using WebApplication1.Models;
@@ -6,8 +8,28 @@ namespace WebApplication1.Data
 {
     public static class Seeder
     {
-        public static void Seed(ApplicationDbContext context)
+        public static void Seed(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
+            // Seed Identity roles
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            string[] roles = new[]
+            {
+                "UserManager",
+                "Admin",
+                "Teacher",
+                "StudentModify",
+                "Student",
+                "TeacherModify",
+                "CourseModify"
+            };
+            foreach (var role in roles)
+            {
+                if (!roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
+                {
+                    roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
+                }
+            }
+
             if (!context.Students.Any())
             {
                 // Add 100 students
