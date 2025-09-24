@@ -11,57 +11,32 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
+
+<input type="text" id="teacherSearch" class="form-control mb-2" placeholder="Search teachers..." />
+
+<table class="table" id="teachersTable">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].Contact)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].Qualifications)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].ClassesTaught)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].Contact)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].Qualifications)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].Address)</th>
+            <th>@Html.DisplayNameFor(model => model.Teacher[0].ClassesTaught)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Teacher) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contact)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qualifications)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClassesTaught)
-            </td>
+            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Contact)</td>
+            <td>@Html.DisplayFor(modelItem => item.Qualifications)</td>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@Html.DisplayFor(modelItem => item.Address)</td>
+            <td>@Html.DisplayFor(modelItem => item.ClassesTaught)</td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
@@ -71,3 +46,17 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // Simple client-side search
+        document.getElementById('teacherSearch').addEventListener('keyup', function () {
+            var search = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#teachersTable tbody tr');
+            rows.forEach(function (row) {
+                var text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+    </script>
+}
