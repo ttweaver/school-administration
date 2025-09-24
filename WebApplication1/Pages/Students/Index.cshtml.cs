@@ -12,18 +12,42 @@ namespace WebApplication1.Pages.Students
 {
     public class IndexModel : PageModel
     {
-        private readonly WebApplication1.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        public IndexModel(ApplicationDbContext context) => _context = context;
 
-        public IndexModel(WebApplication1.Data.ApplicationDbContext context)
+        public IList<Student> Student { get; set; } = new List<Student>();
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 10;
+        [BindProperty(SupportsGet = true)]
+        public string? Search { get; set; }
+
+        public async Task OnGetAsync(int? pageNumber, int? pageSize, string? search)
         {
-            _context = context;
-        }
+            PageSize = pageSize ?? PageSize;
+            Search = search ?? Search;
 
-        public IList<Student> Student { get;set; } = default!;
+            var query = _context.Students.AsQueryable();
 
-        public async Task OnGetAsync()
-        {
-            Student = await _context.Students.ToListAsync();
+            if (!string.IsNullOrWhiteSpace(Search))
+            {
+                query = query.Where(s =>
+                    s.FirstName.Contains(Search) ||
+                    s.LastName.Contains(Search) ||
+                    s.Email.Contains(Search));
+            }
+
+            var totalStudents = await query.CountAsync();
+            TotalPages = (int)Math.Ceiling(totalStudents / (double)PageSize);
+            CurrentPage = pageNumber ?? 1;
+
+            Student = await query
+                .OrderBy(s => s.LastName)
+                .ThenBy(s => s.FirstName)
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
         }
     }
 }

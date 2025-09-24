@@ -45,5 +45,7 @@ namespace WebApplication1.Models
 
         // Navigation property for assignments (scores)
         public List<Assignment> Assignments { get; set; } = new();
-    }
+
+        public List<Enrollment> Enrollments { get; set; } = new();
+	}
 }

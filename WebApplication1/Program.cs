@@ -37,4 +37,10 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    WebApplication1.Data.Seeder.Seed(db);
+}
+
 app.Run();

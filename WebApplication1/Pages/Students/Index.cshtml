@@ -8,49 +8,59 @@
 
 <h1>Students</h1>
 
+<form method="get" class="mb-2 d-flex align-items-center gap-2">
+    <label for="pageSize">Records per page:</label>
+    <select id="pageSize" name="pageSize" onchange="this.form.submit()" class="form-select d-inline w-auto">
+        @foreach (var size in new[] { 10, 20, 50, 100 })
+        {
+            <option value="@size" selected="@(size == Model.PageSize ? "selected" : null)">@size</option>
+        }
+    </select>
+    <input type="text" name="search" value="@Model.Search" class="form-control w-auto" placeholder="Search students..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
 <p>
     <a asp-page="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Student[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student[0].DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student[0].Email)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Student[0].FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.Student[0].LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.Student[0].DateOfBirth)</th>
+            <th>@Html.DisplayNameFor(model => model.Student[0].Email)</th>
             <th></th>
+            <th>Enroll</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Student) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
+            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+            <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+            <td>
                 <a asp-page="/Students/Enroll/Enroll" asp-route-id="@item.Id">Enroll</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-page="./Index" asp-route-pageNumber="@i" asp-route-pageSize="@Model.PageSize">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

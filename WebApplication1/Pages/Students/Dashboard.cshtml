@@ -1,0 +1,112 @@
+@page "/Students/Dashboard/{studentId:int}"
+@model WebApplication1.Pages.Students.DashboardModel
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Student Dashboard - @Model.StudentFirstName</h1>
+
+<h2>Enrolled Courses</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Teacher</th>
+            <th>Grade</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var course in Model.EnrolledCourses)
+    {
+        var grade = Model.CourseGrades.ContainsKey(course.Id) ? Model.CourseGrades[course.Id] : null;
+        <tr>
+            <td>
+                @course.Name
+            </td>
+            <td>@course.Teacher?.LastName</td>
+            <td>@(grade != null ? grade.ToString() : "-")</td>
+            <td>
+                <button class="btn btn-link" onclick="showAssignments(@course.Id)">View Assignments</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<!-- Modal for assignments -->
+<div class="modal fade" id="assignmentsModal" tabindex="-1" aria-labelledby="assignmentsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignmentsModalLabel">Assignments for <span id="modalCourseTitle"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table" id="modalAssignmentsTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Due Date</th>
+                    <th>Points Possible</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Current Teachers</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Teacher Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var teacher in Model.CurrentTeachers)
+    {
+        <tr>
+            <td>@teacher.FirstName @teacher.LastName</td>
+            <td>@teacher.Email</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        var assignmentsData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AssignmentsByCourse));
+        var courseNames = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CourseNames));
+
+        function showAssignments(courseId) {
+            var tableBody = document.getElementById('modalAssignmentsTable').getElementsByTagName('tbody')[0];
+            var courseTitle = document.getElementById('modalCourseTitle');
+            tableBody.innerHTML = '';
+            courseTitle.textContent = courseNames[courseId] || '';
+            if (assignmentsData[courseId] && assignmentsData[courseId].length > 0) {
+                assignmentsData[courseId].forEach(function (a) {
+                    var row = document.createElement('tr');
+                    row.innerHTML = `<td>${a.Title}</td>
+                                     <td>${a.DueDate ? a.DueDate.substring(0,10) : ''}</td>
+                                     <td>${a.PointsPossible}</td>
+                                     <td>${a.Grade ?? '-'}</td>`;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                var row = document.createElement('tr');
+                row.innerHTML = `<td colspan="4" class="text-center">No assignments for this course.</td>`;
+                tableBody.appendChild(row);
+            }
+            var modal = new bootstrap.Modal(document.getElementById('assignmentsModal'));
+            modal.show();
+        }
+    </script>
+}

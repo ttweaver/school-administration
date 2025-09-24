@@ -37,6 +37,11 @@ namespace WebApplication1.Models
         public DateTime DateAssigned { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Due Date")]
+        public DateTime DueDate { get; set; }
+
+		[Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Points possible must be greater than 0.")]
         [Column(TypeName = "decimal(8,2)")]
         [Display(Name = "Points Possible")]

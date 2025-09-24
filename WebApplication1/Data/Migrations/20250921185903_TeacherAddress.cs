@@ -13,13 +13,13 @@ namespace WebApplication1.Data.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "Address",
-                table: "Teachers",
+                table: "Teacher",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Contact",
-                table: "Teachers",
+                table: "Teacher",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
@@ -30,11 +30,11 @@ namespace WebApplication1.Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Address",
-                table: "Teachers");
+                table: "Teacher");
 
             migrationBuilder.DropColumn(
                 name: "Contact",
-                table: "Teachers");
+                table: "Teacher");
         }
     }
 }

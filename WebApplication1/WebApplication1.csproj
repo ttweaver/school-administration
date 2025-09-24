@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Courses\Grades\" />
-    <Folder Include="Pages\Students\Schedule\" />
   </ItemGroup>
 
 </Project>
