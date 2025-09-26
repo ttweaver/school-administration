@@ -266,19 +266,32 @@ namespace WebApplication1.Data
                 }
 
                 // Add 10 assignments of different types per course
+                var assignmentTypes = Enum.GetValues(typeof(AssignmentType)).Cast<AssignmentType>().ToArray();
                 foreach (var course in courses)
                 {
-                    for (int j = 0; j < 10; j++)
+                    if (course.StartDate == null || course.EndDate == null) continue;
+                    var start = course.StartDate.Value;
+                    var end = course.EndDate.Value;
+                    int assignmentCount = 10;
+                    var totalDays = (end - start).TotalDays;
+                    var interval = totalDays / (assignmentCount + 1);
+
+                    for (int j = 0; j < assignmentCount; j++)
                     {
+                        var randomType = assignmentTypes[rand.Next(assignmentTypes.Length)];
+                        var dateAssigned = start.AddDays(interval * (j + 1));
+                        var dueDate = dateAssigned.AddDays(7);
+
                         var assignment = new Assignment
                         {
-                            Title = $"{AssignmentType.Assignment} for {course.Name}",
-                            Type = AssignmentType.Assignment,
-							DueDate = DateTime.Today.AddDays(7 + j),
+                            Title = $"{randomType} for {course.Name}",
+                            Type = randomType,
+                            DateAssigned = dateAssigned,
+                            DueDate = dueDate,
                             PointsPossible = 100,
                             Course = course,
-                            Description = $"This is the {AssignmentType.Assignment} for {course.Name}.",
-						};
+                            Description = $"This is the {randomType} for {course.Name}.",
+                        };
                         context.Assignments.Add(assignment);
                     }
                 }

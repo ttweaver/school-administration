@@ -16,13 +16,24 @@ namespace WebApplication1.Pages.Courses.Assignments
 
         public IList<Assignment> Assignments { get; set; } = default!;
         public int CourseId { get; set; }
+        public string CourseName { get; set; } = string.Empty;
 
 		public async Task<IActionResult> OnGetAsync(int courseId)
         {
             CourseId = courseId;
-			Assignments = await _context.Assignments
-                .Include(s => s.Course)
-                .Where(s => s.CourseId == courseId)
+            var course = await _context.Courses
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            CourseName = course.Name;
+
+            Assignments = await _context.Assignments
+                .Where(a => a.CourseId == courseId)
+                .Include(a => a.Course)
                 .ToListAsync();
 
             return Page();

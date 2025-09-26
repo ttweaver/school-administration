@@ -18,8 +18,4 @@
     <PackageReference Include="QuestPDF" Version="2023.3.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Courses\Grades\" />
-  </ItemGroup>
-
 </Project>
