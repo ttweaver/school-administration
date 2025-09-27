@@ -17,8 +17,14 @@ namespace WebApplication1.Pages.Courses.Assignments.Grades
 
         public Student? Student { get; set; }
         public Assignment? Assignment { get; set; }
+
+        [BindProperty]
         public int CourseId { get; set; }
+
+        [BindProperty]
         public int AssignmentId { get; set; }
+
+        [BindProperty]
         public int StudentId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int courseId, int assignmentId, int studentId)

@@ -265,6 +265,12 @@ namespace WebApplication1.Data
                     }
                 }
 
+                // Get today's date
+                var today = DateTime.Today;
+
+                // Find the current quarter (the first quarter whose Start <= today and End >= today)
+                var currentQuarter = quarters.FirstOrDefault(q => q.Start <= today && q.End >= today);
+
                 // Add 10 assignments of different types per course
                 var assignmentTypes = Enum.GetValues(typeof(AssignmentType)).Cast<AssignmentType>().ToArray();
                 foreach (var course in courses)
@@ -292,6 +298,26 @@ namespace WebApplication1.Data
                             Description = $"This is the {randomType} for {course.Name}.",
                         };
                         context.Assignments.Add(assignment);
+
+                        // Only score assignments in the current quarter and up to today
+                        if (currentQuarter != null &&
+                            dateAssigned >= currentQuarter.Start &&
+                            dateAssigned <= today)
+                        {
+                            foreach (var enrollment in context.Enrollments.Local.Where(e => e.Course == course).ToList())
+                            {
+                                int maxPoints = assignment.PointsPossible;
+                                int pointsEarned = rand.Next(maxPoints / 2, maxPoints + 1);
+
+                                var assignmentScore = new AssignmentScore
+                                {
+                                    Assignment = assignment,
+                                    Student = enrollment.Student,
+                                    PointsEarned = pointsEarned
+                                };
+                                context.AssignmentScores.Add(assignmentScore);
+                            }
+                        }
                     }
                 }
 
