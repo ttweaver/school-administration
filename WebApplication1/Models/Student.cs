@@ -51,5 +51,9 @@ namespace WebApplication1.Models
         public List<Course> Courses { get; set; } = new();
 
         public string FullName => $"{FirstName} {LastName}";
+
+        [Display(Name = "Profile Picture")]
+        public byte[]? ProfilePicture { get; set; }
+        public string? ProfilePictureContentType { get; set; }
     }
 }

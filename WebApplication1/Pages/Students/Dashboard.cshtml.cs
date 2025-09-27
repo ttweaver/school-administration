@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace WebApplication1.Pages.Students
 {
@@ -26,6 +29,9 @@ namespace WebApplication1.Pages.Students
         public Dictionary<int, List<AssignmentInfo>> AssignmentsByCourse { get; set; } = new();
         public Dictionary<int, string> CourseNames { get; set; } = new();
         public string StudentFirstName { get; set; } = "";
+        public int StudentId { get; set; }
+        public byte[]? StudentProfilePicture { get; set; }
+        public string? StudentProfilePictureContentType { get; set; }
 
         public class AssignmentInfo
         {
@@ -57,7 +63,10 @@ namespace WebApplication1.Pages.Students
                 return Forbid();
             }
 
+            StudentId = studentId;
             StudentFirstName = student.FirstName;
+            StudentProfilePicture = student.ProfilePicture;
+            StudentProfilePictureContentType = student.ProfilePictureContentType;
 
             // Get enrolled courses
             EnrolledCourses = await _context.Courses
@@ -108,6 +117,26 @@ namespace WebApplication1.Pages.Students
             }
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostUploadProfilePictureAsync(int studentId, IFormFile ProfilePicture)
+        {
+            var student = await _context.Students.FindAsync(studentId);
+            if (student == null)
+                return NotFound();
+
+            if (ProfilePicture != null && ProfilePicture.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await ProfilePicture.CopyToAsync(ms);
+                    student.ProfilePicture = ms.ToArray();
+                    student.ProfilePictureContentType = ProfilePicture.ContentType;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage(new { studentId });
         }
     }
 }

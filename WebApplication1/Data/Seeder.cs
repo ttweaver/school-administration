@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -32,6 +33,32 @@ namespace WebApplication1.Data
 
             if (!context.Students.Any())
             {
+                // List of top five email domains
+                string[] emailDomains = new[]
+                {
+                    "gmail.com",
+                    "yahoo.com",
+                    "outlook.com",
+                    "icloud.com",
+                    "hotmail.com"
+                };
+                string[] countries = new[] { "USA", "Canada", "UK", "Australia", "Germany" };
+                string[] states = new[] { "NY", "CA", "TX", "FL", "IL", "PA", "OH", "GA", "NC", "MI" };
+                string[] cities = new[] { "New York", "Los Angeles", "Chicago", "Houston", "Miami", "Dallas", "Atlanta", "Philadelphia", "Phoenix", "San Antonio" };
+                string[] streetNames = new[] { "Main St", "Maple Ave", "Oak St", "Pine St", "Cedar Ave", "Elm St", "Washington Ave", "Lake St", "Hill St", "Sunset Blvd" };
+                string[] emergencyNames = new[] { "Pat Smith", "Chris Johnson", "Taylor Brown", "Morgan Lee", "Casey Davis", "Jamie Miller", "Riley Martinez", "Avery Hernandez", "Peyton Lopez", "Drew Gonzalez" };
+
+                // Check for avatar directory and get image files
+                string avatarDirectory = @"C:\Users\troyw\Desktop\Avatars";
+                string[] avatarFiles = Directory.Exists(avatarDirectory)
+                    ? Directory.GetFiles(avatarDirectory, "*.*").Where(f =>
+                        f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
+                      ).ToArray()
+                    : Array.Empty<string>();
+
                 // Add 100 students
                 string[] studentLastNames = new[] { "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee" };
                 string[] studentFirstNames = new[] { "Alex", "Jordan", "Taylor", "Morgan", "Casey", "Jamie", "Riley", "Avery", "Peyton", "Drew", "Skyler", "Cameron", "Reese", "Quinn", "Harper", "Rowan", "Sawyer", "Emerson", "Finley", "Hayden" };
@@ -42,16 +69,55 @@ namespace WebApplication1.Data
                         var first = studentFirstNames[rand.Next(studentFirstNames.Length)];
                         var last = studentLastNames[rand.Next(studentLastNames.Length)];
                         var num = rand.Next(1, 101);
+                        var domain = emailDomains[rand.Next(emailDomains.Length)];
+                        var country = countries[rand.Next(countries.Length)];
+                        var state = states[rand.Next(states.Length)];
+                        var city = cities[rand.Next(cities.Length)];
+                        var streetNumber = rand.Next(100, 999);
+                        var street = streetNames[rand.Next(streetNames.Length)];
+                        var postalCode = $"{rand.Next(10000, 99999)}";
+                        var mobilePhone = $"{rand.Next(200, 999)}-{rand.Next(200, 999)}-{rand.Next(1000, 9999)}";
+                        var homePhone = $"{rand.Next(200, 999)}-{rand.Next(200, 999)}-{rand.Next(1000, 9999)}";
+                        var emergencyContactName = emergencyNames[rand.Next(emergencyNames.Length)];
+                        var emergencyContactPhone = $"{rand.Next(200, 999)}-{rand.Next(200, 999)}-{rand.Next(1000, 9999)}";
+
+                        byte[]? profilePicture = null;
+                        string? profilePictureContentType = null;
+                        if (avatarFiles.Length > 0)
+                        {
+                            var avatarPath = avatarFiles[rand.Next(avatarFiles.Length)];
+                            profilePicture = File.ReadAllBytes(avatarPath);
+                            var ext = Path.GetExtension(avatarPath).ToLowerInvariant();
+                            profilePictureContentType = ext switch
+                            {
+                                ".jpg" or ".jpeg" => "image/jpeg",
+                                ".png" => "image/png",
+                                ".gif" => "image/gif",
+                                _ => "application/octet-stream"
+                            };
+                        }
+
                         return new Student
                         {
                             FirstName = first,
                             LastName = last,
-                            Email = $"{first}.{last}{num}@example.com".ToLower(),
+                            Email = $"{first}.{last}{num}@{domain}".ToLower(),
                             DateOfBirth = new DateTime(
                                 rand.Next(2000, 2011),
                                 rand.Next(1, 13),
                                 rand.Next(1, 29)
-                            )
+                            ),
+                            StreetAddress = $"{streetNumber} {street}",
+                            City = city,
+                            State = state,
+                            PostalCode = postalCode,
+                            Country = country,
+                            MobilePhone = mobilePhone,
+                            HomePhone = homePhone,
+                            EmergencyContactName = emergencyContactName,
+                            EmergencyContactPhone = emergencyContactPhone,
+                            ProfilePicture = profilePicture,
+                            ProfilePictureContentType = profilePictureContentType
                         };
                     }).ToList();
                 context.Students.AddRange(students);
@@ -133,15 +199,6 @@ namespace WebApplication1.Data
                 };
 
                 // List of sample US street names
-                string[] streetNames = new[]
-                {
-                    "Main St", "Maple Ave", "Oak St", "Pine St", "Cedar Ave", "Elm St", "Washington Ave", "Lake St", "Hill St", "Sunset Blvd",
-                    "Park Ave", "2nd St", "3rd St", "4th St", "5th Ave", "Broadway", "Chestnut St", "Walnut St", "Spruce St", "Riverside Dr",
-                    "Highland Ave", "Franklin St", "Jefferson Ave", "Lincoln St", "Jackson St", "Adams Ave", "Madison St", "Monroe St", "Grant Ave", "Harrison St",
-                    "Center St", "Church St", "College Ave", "Court St", "Division St", "Forest Ave", "Grove St", "Locust St", "Market St", "Mill St",
-                    "North St", "Prospect Ave", "School St", "South St", "Union St", "Vine St", "Water St", "Willow St", "Woodland Ave", "Sycamore St"
-                };
-
                 string[] teacherFirstNames = new[] { "Evelyn", "Mason", "Logan", "Harold", "Vivian", "Stella", "Miles", "Clara", "Oscar", "Nora", "Silas", "Hazel", "Jasper", "Ivy", "Otis", "Mabel", "Felix", "Pearl", "Hugo", "June" };
                 string[] teacherLastNames = new[] { "Bennett", "Foster", "Griffin", "Hayes", "Jenkins", "Keller", "Lawson", "Manning", "Nash", "Owens", "Parker", "Quinn", "Ramsey", "Sawyer", "Turner", "Underwood", "Vaughn", "Walker", "Young", "Zimmerman" };
                 string[] qualifications = new[] { "BS", "MS", "PhD" };
@@ -152,6 +209,7 @@ namespace WebApplication1.Data
                         var last = teacherLastNames[rand.Next(teacherLastNames.Length)];
                         var num = rand.Next(1, 101);
                         var qual = qualifications[rand.Next(qualifications.Length)];
+                        var domain = emailDomains[rand.Next(emailDomains.Length)];
                         var areaCode = usAreaCodes[rand.Next(usAreaCodes.Length)];
                         var phone = $"{areaCode}-{rand.Next(200, 1000):D3}-{rand.Next(1000, 10000):D4}";
                         var cityState = usCitiesAndStates[rand.Next(usCitiesAndStates.Length)];
@@ -161,7 +219,7 @@ namespace WebApplication1.Data
                         {
                             FirstName = first,
                             LastName = last,
-                            Email = $"{first}.{last}{num}@gmail.com".ToLower(),
+                            Email = $"{first}.{last}{num}@{domain}".ToLower(),
                             Qualifications = qual,
                             Contact = phone,
                             Address = $"{streetNumber} {streetName}, {cityState.City}, {cityState.State}",

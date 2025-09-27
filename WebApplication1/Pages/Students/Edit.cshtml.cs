@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using System.IO;
 
 namespace WebApplication1.Pages.Students
 {
@@ -22,6 +24,9 @@ namespace WebApplication1.Pages.Students
 
         [BindProperty]
         public Student Student { get; set; } = default!;
+
+        [BindProperty]
+        public IFormFile? ProfilePicture { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,25 +53,30 @@ namespace WebApplication1.Pages.Students
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
-
-            try
+            var studentToUpdate = await _context.Students.FindAsync(Student.Id);
+            if (studentToUpdate == null)
             {
+                return NotFound();
+            }
+
+            if (await TryUpdateModelAsync(studentToUpdate, "Student"))
+            {
+                // Handle profile picture upload to database
+                if (ProfilePicture != null && ProfilePicture.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await ProfilePicture.CopyToAsync(ms);
+                        studentToUpdate.ProfilePicture = ms.ToArray();
+                        studentToUpdate.ProfilePictureContentType = ProfilePicture.ContentType;
+                    }
+                }
+
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(Student.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
 
         private bool StudentExists(int id)
