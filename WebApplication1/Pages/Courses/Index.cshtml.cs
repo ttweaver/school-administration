@@ -29,6 +29,8 @@ namespace WebApplication1.Pages.Courses
         public int PageNumber { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 10;
+        [BindProperty(SupportsGet = true)]
+        public int? CourseId { get; set; }
 
         public int TotalPages { get; set; }
         public int CurrentPage => PageNumber;
@@ -74,6 +76,8 @@ namespace WebApplication1.Pages.Courses
                 .Skip((PageNumber - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
+
+            CourseId = Course.FirstOrDefault()?.Id;
         }
     }
 }

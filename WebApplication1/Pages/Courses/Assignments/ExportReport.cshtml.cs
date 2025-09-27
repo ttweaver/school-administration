@@ -67,7 +67,7 @@ namespace WebApplication1.Pages.Scores
                         {
                             table.Cell().Text(score.Assignment?.Title);
                             table.Cell().Text(""); // No Title property, so leave blank or replace as needed
-                            table.Cell().Text(score.PointsEarned.ToString("F2"));
+                            table.Cell().Text(score.PointsEarned?.ToString("F2"));
                             table.Cell().Text(""); // No PointsPossible property, so leave blank or replace as needed
                         }
                     });

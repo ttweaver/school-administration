@@ -17,7 +17,6 @@ namespace WebApplication1.Data
         public DbSet<Course> Courses { get; set; } = default!;
 		public DbSet<Assignment> Assignments { get; set; } = default!;
 		public DbSet<AssignmentScore> AssignmentScores { get; set; } = default!;
-		public DbSet<CourseGrade> CourseGrades { get; set; } = default!;
         public DbSet<Enrollment> Enrollments { get; set; } = default!;
 	}
 }

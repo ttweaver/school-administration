@@ -1,0 +1,54 @@
+@page "/Courses/{courseId:int}/Students"
+@model WebApplication1.Pages.Courses.Students.IndexModel
+@using WebApplication1.Models
+
+@{
+    ViewData["Title"] = "Students in Course";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Students in @Model.CourseName</h1>
+
+<p>
+    <a asp-page="/Courses/Details" asp-route-id="@Model.CourseId">Back to Course</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Current Grade</th>
+            <th>Points (Earned / Possible)</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var student in Model.Students)
+    {
+        <tr>
+            <td>@student.FullName</td>
+            <td>@student.Email</td>
+            <td>
+                @if (Model.Grades.TryGetValue(student.Id, out var grade) && grade.Possible > 0)
+                {
+                    @GradeCalculator.GetLetterGrade(grade.Earned, grade.Possible)
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <td>
+                @if (Model.Grades.TryGetValue(student.Id, out var grade2))
+                {
+                    @($"{grade2.Earned} / {grade2.Possible}")
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

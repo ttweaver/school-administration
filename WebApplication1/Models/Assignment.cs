@@ -27,11 +27,11 @@ namespace WebApplication1.Models
         [StringLength(100)]
         public required string Title { get; set; }
 
-		[Required]
-		[StringLength(500)]
-		public required string Description { get; set; }
+        [Required]
+        [StringLength(500)]
+        public required string Description { get; set; }
 
-		[Required]
+        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Date Assigned")]
         public DateTime DateAssigned { get; set; }
@@ -41,7 +41,7 @@ namespace WebApplication1.Models
         [Display(Name = "Due Date")]
         public DateTime DueDate { get; set; }
 
-		[Required]
+        [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Points possible must be greater than 0.")]
         [Column(TypeName = "decimal(8,2)")]
         [Display(Name = "Points Possible")]
@@ -52,5 +52,8 @@ namespace WebApplication1.Models
 
         // Navigation properties
         public Course? Course { get; set; }
+
+        // Navigation property for assignment scores
+        public List<AssignmentScore> AssignmentScores { get; set; } = new();
     }
 }

@@ -72,14 +72,16 @@ namespace WebApplication1.Pages.Students
                 .Distinct()
                 .ToList()!;
 
-            // Get course grades
-            var grades = await _context.CourseGrades
-                .Where(g => g.StudentId == studentId)
-                .ToListAsync();
+            // Get course grades using GradeCalculator
             foreach (var course in EnrolledCourses)
             {
-                var grade = grades.FirstOrDefault(g => g.CourseId == course.Id);
-                CourseGrades[course.Id] = grade != null ? grade.Letter.ToString() : "-";
+                var assignments = await _context.Assignments
+                    .Include(a => a.AssignmentScores)
+                    .Where(a => a.CourseId == course.Id)
+                    .ToListAsync();
+
+                var (earned, possible) = GradeCalculator.CalculateStudentGrade(studentId, assignments);
+                CourseGrades[course.Id] = GradeCalculator.GetLetterGrade(earned, possible);
                 CourseNames[course.Id] = course.Name;
             }
 

@@ -143,7 +143,8 @@
                     }
                 </a>
             </th>
-            <th></th>
+            <th>Course Actions</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -157,10 +158,13 @@
             <td>@item.Year</td>
             <td>@item.Teacher?.LastName</td>
             <td>
+                <a asp-page="/Courses/Students/Index" asp-route-courseId="@item.Id">View Students & Grades</a> |
+                <a asp-page="/Courses/Assignments/Index" asp-route-courseId="@item.Id">Assignments</a>
+            </td>
+            <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-page="/Courses/Assignments/Index" asp-route-courseId="@item.Id">Assignments</a>
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

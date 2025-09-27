@@ -49,5 +49,7 @@ namespace WebApplication1.Models
 
         // Navigation property for the list of courses
         public List<Course> Courses { get; set; } = new();
+
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

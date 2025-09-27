@@ -7,12 +7,11 @@ namespace WebApplication1.Models
     {
         [Required]
         public int AssignmentId { get; set; }
-
         public Assignment? Assignment { get; set; }
-
-		[Required]
-		[Range(0, 100, ErrorMessage = "Grade value must be between 0 and 100.")]
-		[DisplayName("Points Earned")]
-		public int PointsEarned { get; set; }
-	}
+        [Required]
+        [Range(0, 100, ErrorMessage = "Grade value must be between 0 and 100.")]
+        [DisplayName("Points Earned")]
+        public int? PointsEarned { get; set; }
+        public bool IsGraded => PointsEarned != null;
+    }
 }

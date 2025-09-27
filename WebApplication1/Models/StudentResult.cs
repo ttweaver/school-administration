@@ -4,16 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
-    public enum LetterGrade
-    {
-        A,
-        B,
-        C,
-        D,
-        F
-    }
-
-    public abstract class StudentResult
+   public abstract class StudentResult
     {
         public int Id { get; set; }
 

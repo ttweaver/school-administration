@@ -32,6 +32,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Assignments[0].Comments)
             </th>
+            <th>
+                Student Grades
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,10 +57,12 @@
                 @Html.DisplayFor(modelItem => item.Comments)
             </td>
             <td>
+                <a asp-page="./Grades/Index" asp-route-courseId="@item.CourseId" asp-route-assignmentId="@item.Id">Enter Grades</a>
+            </td>
+            <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-page="./Grades/Index" asp-route-courseId="@item.CourseId" asp-route-assignmentId="@item.Id">Enter Grade</a>
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
