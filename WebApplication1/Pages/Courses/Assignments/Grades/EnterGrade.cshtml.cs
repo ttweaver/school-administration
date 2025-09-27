@@ -3,65 +3,79 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using System.Threading.Tasks;
 
 namespace WebApplication1.Pages.Courses.Assignments.Grades
 {
     public class EnterGradeModel : PageModel
     {
         private readonly ApplicationDbContext _context;
-
-        public EnterGradeModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public EnterGradeModel(ApplicationDbContext context) => _context = context;
 
         [BindProperty]
         public AssignmentScore AssignmentScore { get; set; } = default!;
 
         public Student? Student { get; set; }
+        public Assignment? Assignment { get; set; }
         public int CourseId { get; set; }
         public int AssignmentId { get; set; }
+        public int StudentId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int courseId, int assignmentId, int studentId)
         {
             CourseId = courseId;
             AssignmentId = assignmentId;
-            Student = await _context.Students.FindAsync(studentId);
+            StudentId = studentId;
 
-			AssignmentScore = await _context.AssignmentScores
-                .FirstOrDefaultAsync(ag => ag.AssignmentId == assignmentId && ag.StudentId == studentId)
+            Assignment = await _context.Assignments
+                .FirstOrDefaultAsync(a => a.Id == assignmentId);
+
+            Student = await _context.Students
+                .FirstOrDefaultAsync(s => s.Id == studentId);
+
+            AssignmentScore = await _context.AssignmentScores
+                .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId)
                 ?? new AssignmentScore { AssignmentId = assignmentId, StudentId = studentId };
 
-            if (Student == null)
-            {
+            if (Assignment == null || Student == null)
                 return NotFound();
-            }
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-			
-			AssignmentId = AssignmentScore.AssignmentId;
-			CourseId = (await _context.Assignments.FindAsync(AssignmentScore.AssignmentId))?.CourseId ?? 0;
-			if (!ModelState.IsValid)
+            // Retrieve the assignment for validation
+            Assignment = await _context.Assignments
+                .FirstOrDefaultAsync(a => a.Id == AssignmentScore.AssignmentId);
+
+            if (Assignment == null)
             {
-				Student = await _context.Students.FindAsync(AssignmentScore.StudentId);
-				return Page();
+                ModelState.AddModelError(string.Empty, "Assignment not found.");
+                return Page();
             }
 
-            var existing = await _context.AssignmentScores
-                .FirstOrDefaultAsync(ag => ag.AssignmentId == AssignmentScore.AssignmentId && ag.StudentId == AssignmentScore.StudentId);
-
-            if (existing != null)
+            // Validate that PointsEarned does not exceed PointsPossible
+            if (AssignmentScore.PointsEarned.HasValue && AssignmentScore.PointsEarned.Value > Assignment.PointsPossible)
             {
-                existing.PointsEarned = AssignmentScore.PointsEarned;
-                existing.Comments = AssignmentScore.Comments;
+                ModelState.AddModelError(nameof(AssignmentScore.PointsEarned), $"Points earned cannot exceed points possible ({Assignment.PointsPossible}).");
+                return Page();
+            }
+
+            if (!ModelState.IsValid)
+                return Page();
+
+            var existingScore = await _context.AssignmentScores
+                .FirstOrDefaultAsync(s => s.AssignmentId == AssignmentScore.AssignmentId && s.StudentId == AssignmentScore.StudentId);
+
+            if (existingScore == null)
+            {
+                _context.AssignmentScores.Add(AssignmentScore);
             }
             else
             {
-                _context.AssignmentScores.Add(AssignmentScore);
+                existingScore.PointsEarned = AssignmentScore.PointsEarned;
+                existingScore.Comments = AssignmentScore.Comments;
             }
 
             await _context.SaveChangesAsync();

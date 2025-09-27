@@ -8,6 +8,13 @@
 
 <h1>Enter Grades for @Model.Assignment?.Title</h1>
 
+@if (Model.Assignment != null)
+{
+    <div style="font-size:1.5rem; margin-bottom:1rem;">
+        <strong>Points Possible:</strong> @Model.Assignment.PointsPossible
+    </div>
+}
+
 @if (Model.Students.Any())
 {
     <table class="table">

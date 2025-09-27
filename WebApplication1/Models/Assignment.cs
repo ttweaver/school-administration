@@ -41,11 +41,22 @@ namespace WebApplication1.Models
         [Display(Name = "Due Date")]
         public DateTime DueDate { get; set; }
 
-        [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Points possible must be greater than 0.")]
-        [Column(TypeName = "decimal(8,2)")]
+        [NotMapped]
         [Display(Name = "Points Possible")]
-        public decimal PointsPossible { get; set; }
+        public int PointsPossible
+        {
+            get
+            {
+                return Type switch
+                {
+                    AssignmentType.Assignment => 50,
+                    AssignmentType.Quiz => 100,
+                    AssignmentType.Project => 250,
+                    AssignmentType.Exam => 500,
+                    _ => 0
+                };
+            }
+        }
 
         [StringLength(400)]
         public string? Comments { get; set; }

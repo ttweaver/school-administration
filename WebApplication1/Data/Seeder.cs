@@ -288,7 +288,6 @@ namespace WebApplication1.Data
                             Type = randomType,
                             DateAssigned = dateAssigned,
                             DueDate = dueDate,
-                            PointsPossible = 100,
                             Course = course,
                             Description = $"This is the {randomType} for {course.Name}.",
                         };
