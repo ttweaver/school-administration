@@ -156,7 +156,7 @@
             <td>@item.EndDate?.ToShortDateString()</td>
             <td>@item.Quarter</td>
             <td>@item.Year</td>
-            <td>@item.Teacher?.LastName</td>
+            <td>@item.Teacher?.FullName</td>
             <td>
                 <a asp-page="/Courses/Students/Index" asp-route-courseId="@item.Id">View Students & Grades</a> |
                 <a asp-page="/Courses/Assignments/Index" asp-route-courseId="@item.Id">Assignments</a>

@@ -16,9 +16,11 @@ namespace WebApplication1.Models
         [Display(Name = "Description")]
         [StringLength(500)]
         public required string? Description { get; set; }
+        [Required(ErrorMessage = "Start Date is required.")]
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         public required DateTime? StartDate { get; set; }
+        [Required(ErrorMessage = "End Date is required.")]
         [Display(Name = "End Date")]
         [DataType(DataType.Date)]
         public required DateTime? EndDate { get; set; }

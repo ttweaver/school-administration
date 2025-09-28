@@ -28,14 +28,13 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course = await _context.Courses.FirstOrDefaultAsync(m => m.Id == id);
-            if (course == null)
+            Course = await _context.Courses // FIX: Use _context.Courses instead of _context.Course
+                .Include(c => c.Teacher)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Course == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                Course = course;
             }
             return Page();
         }
