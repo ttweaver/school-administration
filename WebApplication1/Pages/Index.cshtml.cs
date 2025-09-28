@@ -12,10 +12,6 @@ namespace WebApplication1.Pages
         {
             _logger = logger;
         }
-
-        public List<Student> Students { get; set; } = new List<Student>();
-        public List<AssignmentScore> Score { get; set; } = new List<AssignmentScore>();
-
         public void OnGet()
         {
 

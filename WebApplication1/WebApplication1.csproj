@@ -15,7 +15,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.19" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19" />
-    <PackageReference Include="QuestPDF" Version="2023.3.3" />
+    <PackageReference Include="QuestPDF" Version="2025.7.2" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
 </Project>
