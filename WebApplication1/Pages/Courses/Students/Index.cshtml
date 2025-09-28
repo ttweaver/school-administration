@@ -20,6 +20,7 @@
             <th>Email</th>
             <th>Current Grade</th>
             <th>Points (Earned / Possible)</th>
+            <th>Progress Report</th> <!-- New column -->
         </tr>
     </thead>
     <tbody>
@@ -47,6 +48,13 @@
                 {
                     <span>-</span>
                 }
+            </td>
+            <td>
+                <a asp-page="/Courses/Students/ProgressReport"
+                   asp-route-studentId="@student.Id"
+                   asp-route-courseId="@Model.CourseId">
+                    View Progress Report
+                </a>
             </td>
         </tr>
     }
