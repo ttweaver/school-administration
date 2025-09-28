@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using WebApplication1.Models;
+using System.Drawing;
 
 namespace WebApplication1.Data
 {
@@ -48,16 +49,52 @@ namespace WebApplication1.Data
                 string[] streetNames = new[] { "Main St", "Maple Ave", "Oak St", "Pine St", "Cedar Ave", "Elm St", "Washington Ave", "Lake St", "Hill St", "Sunset Blvd" };
                 string[] emergencyNames = new[] { "Pat Smith", "Chris Johnson", "Taylor Brown", "Morgan Lee", "Casey Davis", "Jamie Miller", "Riley Martinez", "Avery Hernandez", "Peyton Lopez", "Drew Gonzalez" };
 
-                // Check for avatar directory and get image files
-                string avatarDirectory = @"C:\Users\troyw\Desktop\Avatars";
-                string[] avatarFiles = Directory.Exists(avatarDirectory)
-                    ? Directory.GetFiles(avatarDirectory, "*.*").Where(f =>
-                        f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                        f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                        f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                        f.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
-                      ).ToArray()
-                    : Array.Empty<string>();
+                // Sprite sheet for avatars
+                string spriteSheetPath = @".\wwwroot\images\avatars.jpg"; // The single image file
+                int columns = 8;
+                int rows = 4;
+                int avatarWidth = 240;  // Set to your avatar width
+                int avatarHeight = 240; // Set to your avatar height
+
+                List<byte[]> avatarImages = new List<byte[]>();
+                List<string> avatarContentTypes = new List<string>();
+
+                if (File.Exists(spriteSheetPath))
+                {
+                    using (var spriteSheet = new Bitmap(spriteSheetPath))
+                    {
+                        int offsetX = 55; // Change if your grid starts away from the left edge
+                        int offsetY = 30; // Change if your grid starts away from the top edge
+                        int spacingX = -16; // Change if there is horizontal spacing between sprites
+                        int spacingY = -20; // Change if there is vertical spacing between sprites
+
+                        for (int row = 0; row < rows; row++)
+                        {
+                            for (int col = 0; col < columns; col++)
+                            {
+                                int x = offsetX + col * (avatarWidth + spacingX);
+                                int y = offsetY + row * (avatarHeight + spacingY);
+                                using (var avatarBmp = new Bitmap(avatarWidth, avatarHeight))
+                                using (var g = Graphics.FromImage(avatarBmp))
+                                {
+                                    g.DrawImage(spriteSheet, new Rectangle(0, 0, avatarWidth, avatarHeight),
+                                        new Rectangle(x, y, avatarWidth, avatarHeight),
+                                        GraphicsUnit.Pixel);
+
+                                    // Save to disk for debugging
+                                    //avatarBmp.Save($"avatar_{row}_{col}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        avatarBmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                                        avatarImages.Add(ms.ToArray());
+                                        avatarContentTypes.Add("image/png");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // Add 100 students
                 string[] studentLastNames = new[] { "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee" };
@@ -83,18 +120,11 @@ namespace WebApplication1.Data
 
                         byte[]? profilePicture = null;
                         string? profilePictureContentType = null;
-                        if (avatarFiles.Length > 0)
+                        if (avatarImages.Count > 0)
                         {
-                            var avatarPath = avatarFiles[rand.Next(avatarFiles.Length)];
-                            profilePicture = File.ReadAllBytes(avatarPath);
-                            var ext = Path.GetExtension(avatarPath).ToLowerInvariant();
-                            profilePictureContentType = ext switch
-                            {
-                                ".jpg" or ".jpeg" => "image/jpeg",
-                                ".png" => "image/png",
-                                ".gif" => "image/gif",
-                                _ => "application/octet-stream"
-                            };
+                            int avatarIndex = (i - 1) % avatarImages.Count;
+                            profilePicture = avatarImages[avatarIndex];
+                            profilePictureContentType = avatarContentTypes[avatarIndex];
                         }
 
                         return new Student

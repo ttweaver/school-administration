@@ -19,12 +19,30 @@
     {
         <span>No profile picture uploaded.</span>
     }
-    <form method="post" enctype="multipart/form-data" asp-page-handler="UploadProfilePicture" asp-route-studentId="@Model.StudentId">
-        <div class="form-group mt-2">
-            <input type="file" name="ProfilePicture" class="form-control" accept="image/*" />
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Upload New Picture</button>
-    </form>
+    <br />
+    <a href="#" class="mt-2 d-inline-block" data-bs-toggle="modal" data-bs-target="#uploadProfilePictureModal">
+        Upload New Picture
+    </a>
+</div>
+
+<!-- Modal for uploading profile picture -->
+<div class="modal fade" id="uploadProfilePictureModal" tabindex="-1" aria-labelledby="uploadProfilePictureModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadProfilePictureModalLabel">Upload Profile Picture</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" asp-page-handler="UploadProfilePicture" asp-route-studentId="@Model.StudentId">
+            <div class="form-group">
+                <input type="file" name="ProfilePicture" class="form-control" accept="image/*" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <h2>Enrolled Courses</h2>
@@ -115,8 +133,8 @@
                     var row = document.createElement('tr');
                     row.innerHTML = `<td>${a.Title}</td>
                                      <td>${a.DueDate ? a.DueDate.substring(0,10) : ''}</td>
-                                     <td>${a.PointsPossible}</td>
-                                     <td>${a.Grade ?? '-'}</td>`;
+                                     <td>${a.PointsEarned} / ${a.PointsPossible}</td>
+                                     <td>${a.Grade}</td>`;
                     tableBody.appendChild(row);
                 });
             } else {

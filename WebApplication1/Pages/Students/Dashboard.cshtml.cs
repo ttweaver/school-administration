@@ -37,7 +37,9 @@ namespace WebApplication1.Pages.Students
         {
             public string Title { get; set; } = "";
             public DateTime? DueDate { get; set; }
-            public decimal PointsPossible { get; set; }
+            public int PointsPossible { get; set; }
+            public int PointsEarned { get; set; }
+            public string Grade { get; set; } = "-";
         }
 
         public async Task<IActionResult> OnGetAsync(int studentId)
@@ -106,11 +108,17 @@ namespace WebApplication1.Pages.Students
                 {
                     var ag = await _context.AssignmentScores
                         .FirstOrDefaultAsync(g => g.AssignmentId == a.Id && g.StudentId == studentId);
+                    int pointsEarned = ag?.PointsEarned ?? 0;
+                    int pointsPossible = a.PointsPossible;
+                    string grade = GradeCalculator.GetLetterGrade(pointsEarned, pointsPossible);
+
                     assignmentInfos.Add(new AssignmentInfo
                     {
                         Title = a.Title,
                         DueDate = a.DueDate,
-                        PointsPossible = a.PointsPossible,
+                        PointsPossible = pointsPossible,
+                        PointsEarned = pointsEarned,
+                        Grade = grade
                     });
                 }
                 AssignmentsByCourse[course.Id] = assignmentInfos;
