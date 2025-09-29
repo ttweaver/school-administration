@@ -6,6 +6,16 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}
+
 <h1>Enroll in a Class</h1>
 
 @if (Model.Enrollment.StudentId != 0)
@@ -25,7 +35,7 @@
         @foreach (var course in Model.Course)
         {
             var alreadyEnrolled = Model.EnrolledCourseIds.Contains(course.Id);
-            var canUnenroll = alreadyEnrolled && (course.StartDate == null || course.StartDate > DateTime.Today);
+            var canUnenroll = alreadyEnrolled && (course.StartDate <= DateTime.Today);
             <tr>
                 <td>@course.Name</td>
                 <td>@course.Description</td>
