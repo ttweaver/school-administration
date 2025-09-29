@@ -36,7 +36,7 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
             Course = course;
-           ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "Id");
+           ViewData["TeacherId"] = new SelectList(_context.Teachers.OrderBy(c => c.LastName), "Id", "FullName");
             return Page();
         }
 

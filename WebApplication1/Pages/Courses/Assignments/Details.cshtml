@@ -52,5 +52,5 @@
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Assignment.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="/Courses/Assignments/Index" asp-route-courseId="@Model.Assignment.CourseId">Back to List</a>
 </div>
