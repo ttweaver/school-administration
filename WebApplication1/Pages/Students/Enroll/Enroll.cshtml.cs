@@ -25,8 +25,15 @@ namespace WebApplication1.Pages.Enroll
 
         public void OnGet(int id)
         {
-            Enrollment.StudentId = id;
-            Course = _context.Courses.ToList();
+			var today = DateTime.Today;
+			var nextQuarter = QuarterHelper.GetNextQuarter(today);
+
+			Enrollment.StudentId = id;
+            var courses = _context.Courses
+                .AsEnumerable() // Switch to LINQ-to-Objects
+                .Where(e => QuarterHelper.GetQuarterFromDate(e.StartDate) == nextQuarter)
+                .ToList();
+            Course = courses;
             EnrolledCourseIds = _context.Enrollments
                 .Where(e => e.StudentId == id)
                 .Select(e => e.CourseId)

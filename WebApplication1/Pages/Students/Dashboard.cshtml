@@ -8,6 +8,11 @@
 
 <h1>Student Dashboard - @Model.StudentFirstName</h1>
 
+<div class="alert alert-info mt-3">
+    <strong>Enrollment for next quarter is available now!</strong>
+    <a class="btn btn-primary btn-sm ms-2" asp-page="./Enroll/Enroll" asp-route-id="@Model.StudentId">Go to Enrollment</a>
+</div>
+
 <div class="row">
     <div class="col-md-3 mb-4 text-center">
         <h4>Profile Picture</h4>
@@ -48,6 +53,7 @@
 </div>
 
 <h2>Enrolled Courses</h2>
+<h5>@Model.CurrentQuarterName @Model.CurrentQuarterYear</h5>
 <table class="table">
     <thead>
         <tr>

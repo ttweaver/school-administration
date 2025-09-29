@@ -29,8 +29,8 @@
             <tr>
                 <td>@course.Name</td>
                 <td>@course.Description</td>
-                <td>@course.StartDate?.ToShortDateString()</td>
-                <td>@course.EndDate?.ToShortDateString()</td>
+                <td>@course.StartDate.ToShortDateString()</td>
+                <td>@course.EndDate.ToShortDateString()</td>
                 <td>
                     @if (alreadyEnrolled)
                     {
