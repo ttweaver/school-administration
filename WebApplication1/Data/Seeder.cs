@@ -312,26 +312,19 @@ namespace WebApplication1.Data
                     new { Name = "COM101 Public Speaking", Description = "Principles and practice of effective oral communication." }
                 };
 
-                // Define quarter start/end dates for 2025
-                var quarters = new[]
-                {
-                    new { Name = "Winter", Start = new DateTime(2025, 1, 6), End = new DateTime(2025, 3, 21) },
-                    new { Name = "Spring", Start = new DateTime(2025, 3, 31), End = new DateTime(2025, 6, 13) },
-                    new { Name = "Summer", Start = new DateTime(2025, 6, 23), End = new DateTime(2025, 9, 5) },
-                    new { Name = "Fall",   Start = new DateTime(2025, 9, 15), End = new DateTime(2025, 11, 28) }
-                };
-
                 // Add 50 courses, cycling through the course catalog and quarters
+                var quarters = QuarterHelper.QuarterDates();
+
                 var courses = Enumerable.Range(1, 50)
                     .Select(i => {
                         var courseInfo = courseCatalog[(i - 1) % courseCatalog.Length];
-                        var quarter = quarters[(i - 1) % quarters.Length];
+                        var quarter = quarters[rand.Next(quarters.Length)];
                         return new Course
                         {
                             Name = courseInfo.Name,
                             Description = courseInfo.Description,
-                            StartDate = quarter.Start,
-                            EndDate = quarter.End,
+                            StartDate = quarter.StartDate,
+                            EndDate = quarter.EndDate,
                             Teacher = teachers[i - 1],
                             TeacherId = teachers[i - 1].Id
                         };
@@ -364,8 +357,8 @@ namespace WebApplication1.Data
                 foreach (var course in courses)
                 {
                     if (course.StartDate == null || course.EndDate == null) continue;
-                    var start = course.StartDate.Value;
-                    var end = course.EndDate.Value;
+                    var start = course.StartDate;
+                    var end = course.EndDate;
                     int assignmentCount = 10;
                     var totalDays = (end - start).TotalDays;
                     var interval = totalDays / (assignmentCount + 1);
