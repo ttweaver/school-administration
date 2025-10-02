@@ -6,22 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
 namespace WebApplication1.Pages.Courses
 {
-    public class EditModel : PageModel
+    public class EditModel(WebApplication1.Data.ApplicationDbContext context) : PageModel
     {
-        private readonly WebApplication1.Data.ApplicationDbContext _context;
-
-        public EditModel(WebApplication1.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly WebApplication1.Data.ApplicationDbContext _context = context;
 
         [BindProperty]
         public Course Course { get; set; } = default!;
+        public object? ViewBag { get; private set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,18 +27,27 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course =  await _context.Courses.FirstOrDefaultAsync(m => m.Id == id);
+            var course =  await _context.Courses
+                .Include(c => c.Teacher)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
                 return NotFound();
             }
             Course = course;
-           ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "Id");
+            ViewBag = new System.Dynamic.ExpandoObject();
+            ((IDictionary<string, object>)ViewBag)["TeacherId"] = new SelectList(
+                _context.Teachers
+                    .AsNoTracking()
+                    .Select(t => new { t.Id, FullName = t.FullName }),
+                "Id",
+                "FullName",
+                Course.TeacherId
+            );
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

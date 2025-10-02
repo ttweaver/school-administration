@@ -19,9 +19,37 @@ namespace WebApplication1.Models
         [Display(Name = "Courses Teaching")]
         public string? ClassesTaught { get; set; }
         
-        public string FullName => $"{FirstName} {LastName}";
+        public string FullName => $"{FirstName} {LastName}".Trim();
     }
 }
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
