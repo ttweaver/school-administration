@@ -19,21 +19,19 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "Start Date is required.")]
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
-        public required DateTime? StartDate { get; set; }
+        public required DateTime StartDate { get; set; }
         [Required(ErrorMessage = "End Date is required.")]
         [Display(Name = "End Date")]
         [DataType(DataType.Date)]
-        public required DateTime? EndDate { get; set; }
+        public required DateTime EndDate { get; set; }
         [DisplayName("Year")]
-        public int? Year { get { return this.StartDate?.Year; } }
+        public int? Year { get { return this.StartDate.Year; } }
         [DisplayName("Quarter")]
         public Quarter? Quarter
         {
             get
             {
-                if (StartDate == null) return null;
-                int month = StartDate.Value.Month;
-                return QuarterHelper.GetQuarterFromMonth(month);
+                return QuarterHelper.GetQuarterFromDate(StartDate);
             }
         }
 

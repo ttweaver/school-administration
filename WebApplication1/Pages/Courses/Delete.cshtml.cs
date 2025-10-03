@@ -29,7 +29,7 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
 
-            var course = await _context.Courses.FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _context.Courses.Include(c => c.Teacher).FirstOrDefaultAsync(m => m.Id == id);
 
             if (course == null)
             {

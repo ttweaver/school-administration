@@ -35,6 +35,7 @@ namespace WebApplication1.Pages.Courses
                 return NotFound();
             }
             Course = course;
+<<<<<<< HEAD
             ViewBag = new System.Dynamic.ExpandoObject();
             ((IDictionary<string, object>)ViewBag)["TeacherId"] = new SelectList(
                 _context.Teachers
@@ -44,6 +45,9 @@ namespace WebApplication1.Pages.Courses
                 "FullName",
                 Course.TeacherId
             );
+=======
+           ViewData["TeacherId"] = new SelectList(_context.Teachers.OrderBy(c => c.LastName), "Id", "FullName");
+>>>>>>> 982cf84ef7a41ab42077dc8aaf93bec555f1f5b2
             return Page();
         }
 

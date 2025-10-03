@@ -32,6 +32,8 @@ namespace WebApplication1.Pages.Students
         public int StudentId { get; set; }
         public byte[]? StudentProfilePicture { get; set; }
         public string? StudentProfilePictureContentType { get; set; }
+        public string CurrentQuarterName { get; set; } = "";
+        public int CurrentQuarterYear { get; set; }
 
         public class AssignmentInfo
         {
@@ -71,10 +73,22 @@ namespace WebApplication1.Pages.Students
             StudentProfilePictureContentType = student.ProfilePictureContentType;
 
             // Get enrolled courses
-            EnrolledCourses = await _context.Courses
+            var currentQuarterDate = QuarterHelper.QuarterDates()
+                .FirstOrDefault(qd => QuarterHelper.GetQuarterFromDate(DateTime.Today) == Enum.Parse<Quarter>(qd.Name));
+            if (currentQuarterDate != null)
+            {
+                CurrentQuarterName = currentQuarterDate.Name;
+                CurrentQuarterYear = currentQuarterDate.StartDate.Year;
+            }
+
+            var allEnrolledCourses = await _context.Courses
                 .Include(c => c.Teacher)
                 .Where(c => c.Enrollments.Any(e => e.StudentId == studentId))
                 .ToListAsync();
+
+            EnrolledCourses = allEnrolledCourses
+                .Where(c => QuarterHelper.GetQuarterFromDate(c.StartDate) == QuarterHelper.GetQuarterFromDate(DateTime.Today))
+                .ToList();
 
             // Get current teachers
             CurrentTeachers = EnrolledCourses

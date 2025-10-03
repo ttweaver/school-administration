@@ -29,7 +29,7 @@ namespace WebApplication1.Pages.Courses.Assignments
                 return NotFound();
             }
 
-            var score = await _context.Assignments.FirstOrDefaultAsync(m => m.Id == id);
+            var score = await _context.Assignments.Include(c => c.Course).FirstOrDefaultAsync(m => m.Id == id);
 
             if (score == null)
             {

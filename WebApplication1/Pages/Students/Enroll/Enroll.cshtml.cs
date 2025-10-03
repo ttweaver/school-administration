@@ -25,8 +25,14 @@ namespace WebApplication1.Pages.Enroll
 
         public void OnGet(int id)
         {
-            Enrollment.StudentId = id;
-            Course = _context.Courses.ToList();
+			var today = DateTime.Today;
+
+			Enrollment.StudentId = id;
+            var courses = _context.Courses
+                .AsEnumerable() // Switch to LINQ-to-Objects
+                .Where(e => QuarterHelper.GetQuarterFromDate(e.StartDate) == QuarterHelper.GetNextQuarter(today))
+                .ToList();
+            Course = courses;
             EnrolledCourseIds = _context.Enrollments
                 .Where(e => e.StudentId == id)
                 .Select(e => e.CourseId)
@@ -35,10 +41,53 @@ namespace WebApplication1.Pages.Enroll
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
+			var today = DateTime.Today;
+
+
+			if (!ModelState.IsValid)
             {
-                Course = _context.Courses.ToList();
-                EnrolledCourseIds = _context.Enrollments
+
+                Enrollment.StudentId = id;
+
+				Course = _context.Courses
+				.AsEnumerable() // Switch to LINQ-to-Objects
+				.Where(e => QuarterHelper.GetQuarterFromDate(e.StartDate) == QuarterHelper.GetNextQuarter(today))
+				.ToList();
+				EnrolledCourseIds = _context.Enrollments
+                    .Where(e => e.StudentId == id)
+                    .Select(e => e.CourseId)
+                    .ToHashSet();
+                return Page();
+            }
+
+            var nextQuarter = QuarterHelper.GetNextQuarter(DateTime.Today);
+
+            // Get all enrollments for the student
+            var enrollments = _context.Enrollments
+                .Where(e => e.StudentId == id)
+                .ToList();
+
+            // Get the course IDs for these enrollments
+            var courseIds = enrollments.Select(e => e.CourseId).ToList();
+
+            // Get the courses for these enrollments
+            var courses = _context.Courses
+                .Where(c => courseIds.Contains(c.Id))
+                .ToList();
+
+            // Count how many enrollments are in the next quarter
+            var currentQuarterEnrollments = courses
+                .Count(c => QuarterHelper.GetQuarterFromDate(c.StartDate) == nextQuarter);
+
+            if (currentQuarterEnrollments >= 4)
+            {
+                ModelState.AddModelError(string.Empty, "You may only enroll in up to 4 courses per quarter.");
+                Enrollment.StudentId = id;
+				Course = _context.Courses
+				.AsEnumerable() // Switch to LINQ-to-Objects
+				.Where(e => QuarterHelper.GetQuarterFromDate(e.StartDate) == QuarterHelper.GetNextQuarter(today))
+				.ToList();
+				EnrolledCourseIds = _context.Enrollments
                     .Where(e => e.StudentId == id)
                     .Select(e => e.CourseId)
                     .ToHashSet();
@@ -48,8 +97,8 @@ namespace WebApplication1.Pages.Enroll
             Enrollment.StudentId = id;
             _context.Enrollments.Add(Enrollment);
             await _context.SaveChangesAsync();
-			return RedirectToPage(new { id });
-		}
+            return RedirectToPage(new { id });
+        }
 
         public async Task<IActionResult> OnPostUnenrollAsync(int id)
         {
