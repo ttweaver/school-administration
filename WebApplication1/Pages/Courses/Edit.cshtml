@@ -37,10 +37,6 @@
                 <span asp-validation-for="Course.EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label>Selected Teacher</label>
-                <input type="text" class="form-control" value="@Model.Course.Teacher?.FirstName @Model.Course.Teacher?.LastName" readonly />
-            </div>
-            <div class="form-group">
                 <span class="text-danger">*</span>
                 <label asp-for="Course.TeacherId" class="control-label"></label>
                 <select asp-for="Course.TeacherId" class="form-control" asp-items="ViewBag.TeacherId"></select>
